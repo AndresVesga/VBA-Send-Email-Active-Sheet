@@ -1,0 +1,32 @@
+Sub SendActiveSheet()
+' Create by:        Fabián Garzón
+' Date:             30/04/2021
+' Funcionalidad:    Envía la hoja activa por correo con nombre variable.
+Dim fileName As String
+Dim temporalSource As String
+Dim message As String
+
+On Error Resume Next
+
+    message = "Se enviará una hoja por email. Ingresa el nombre con el que se enviará el archivo." + _
+    vbCrLf + vbCrLf + "Si deja en blanco, se enviará con el nombre de la hoja."
+    
+    fileName = VBA.InputBox(message, "UMB - Envío Auditoría")
+    If fileName = "" Then fileName = ActiveSheet.Name
+    
+    temporalSource = VBA.Environ("Temp") & "\"
+    fileName = temporalSource & fileName & ".xlsx"
+    
+    
+    
+    ActiveWorkbook.ActiveSheet.Copy
+    ActiveWorkbook.SaveAs fileName
+    CommandBars.ExecuteMso ("FileSendAsAttachment")
+    
+    ActiveWorkbook.Close False
+    VBA.Kill fileName
+
+On Error GoTo 0
+
+
+End Sub
